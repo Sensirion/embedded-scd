@@ -3,7 +3,7 @@ scd_common_dir := .
 sw_i2c_dir := ${sensirion_common_dir}/sw_i2c
 hw_i2c_dir := ${sensirion_common_dir}/hw_i2c
 
-CFLAGS := -Os -Wall -Werror -I. -I${sensirion_common_dir}
+CFLAGS := -Os -Wall -I. -I${sensirion_common_dir}
 
 sensirion_common_objects := sensirion_common.o
 scd_common_objects := scd_git_version.o
