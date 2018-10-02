@@ -106,7 +106,6 @@ static s16 scd_i2c_read_words(u16 *data, u16 data_words) {
  */
 static void scd_fill_cmd_send_buf(u8 *buf, u16 cmd, const u16 *args,
                                   u8 num_args) {
-    u16 word;
     u8 crc;
     u8 i;
     u8 idx = 0;
@@ -115,11 +114,10 @@ static void scd_fill_cmd_send_buf(u8 *buf, u16 cmd, const u16 *args,
     buf[idx++] = (u8)((cmd & 0x00FF) >> 0);
 
     for (i = 0; i < num_args; ++i) {
-        word = be16_to_cpu(args[i]);
-        crc = sensirion_common_generate_crc((u8 *)&word, SCD_WORD_LEN);
+        crc = sensirion_common_generate_crc((u8 *)&args[i], SCD_WORD_LEN);
 
-        buf[idx++] = (u8)((word & 0x00FF) >> 0);
-        buf[idx++] = (u8)((word & 0xFF00) >> 8);
+        buf[idx++] = (u8)((args[i] & 0xFF00) >> 8);
+        buf[idx++] = (u8)((args[i] & 0x00FF) >> 0);
         buf[idx++] = crc;
     }
 }
