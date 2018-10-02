@@ -18,14 +18,15 @@
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "sensirion_arch_config.h"
@@ -56,11 +57,12 @@ static const u8 SCD_I2C_ADDRESS = 0x61;
 
 /**
  * scd_i2c_read_words() - read data words from sensor
+ *
  * @data:       Allocated buffer to store the read data.
  *              The buffer may also have been modified on STATUS_FAIL return.
  * @data_words: Number of data words to read (without CRC bytes)
  *
- * Return:      STATUS_OK on success, an error code otherwise
+ * @return      STATUS_OK on success, an error code otherwise
  */
 static s16 scd_i2c_read_words(u16 *data, u16 data_words) {
     s16 ret;
@@ -127,7 +129,7 @@ static void scd_fill_cmd_send_buf(u8 *buf, u16 cmd, const u16 *args,
  * scd_i2c_write() - writes to the sensor
  * @command:    Sensor command
  *
- * Return:      STATUS_OK on success, an error code otherwise
+ * @return      STATUS_OK on success, an error code otherwise
  */
 static s16 scd_i2c_write(u16 command) {
     u8 buf[SCD_COMMAND_LEN];
@@ -144,7 +146,7 @@ static s16 scd_i2c_write(u16 command) {
  * @data_words: Allocated buffer to store the read data
  * @num_words:  Data words to read (without CRC bytes)
  *
- * Return:      STATUS_OK on success, an error code otherwise
+ * @return      STATUS_OK on success, an error code otherwise
  */
 static s16 scd_i2c_read_words_from_cmd(u16 cmd, u16 *data_words,
                                        u16 num_words) {
@@ -255,31 +257,16 @@ s16 scd_set_altitude(u16 altitude) {
 }
 
 
-/**
- * scd_get_driver_version() - Return the driver version
- * Return:  Driver version string
- */
-const char *scd_get_driver_version()
-{
+const char *scd_get_driver_version() {
     return SCD_DRV_VERSION_STR;
 }
 
 
-/**
- * scd_get_configured_address() - returns the configured I2C address
- *
- * Return:      u8 I2C address
- */
 u8 scd_get_configured_address() {
     return SCD_I2C_ADDRESS;
 }
 
 
-/**
- * scd_probe() - check if sensor is available
- *
- * Return:  STATUS_OK on success, an error code otherwise
- */
 s16 scd_probe() {
     u16 data_ready;
 

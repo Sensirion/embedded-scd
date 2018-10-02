@@ -1,32 +1,33 @@
 /*
-* Copyright (c) 2018, Sensirion AG
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*
-* * Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-*
-* * Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-*
-* * Neither the name of Sensirion AG nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (c) 2018, Sensirion AG
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *
+ * * Neither the name of Sensirion AG nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #ifndef SCD30_H
 #define SCD30_H
@@ -41,20 +42,21 @@ extern "C" {
 /**
  * scd_probe() - check if the SCD sensor is available and initialize it
  *
- * Return:  0 on success, an error code otherwise.
+ * @return  0 on success, an error code otherwise.
  */
 s16 scd_probe(void);
 
 /**
  * scd_get_driver_version() - Returns the driver version
- * Return:  Driver version string
+ *
+ * @return  Driver version string
  */
 const char *scd_get_driver_version(void);
 
 /**
  * scd_get_configured_address() - Returns the configured I2C address
  *
- * Return:      u8 I2C address
+ * @return      u8 I2C address
  */
 u8 scd_get_configured_address(void);
 
@@ -75,6 +77,7 @@ u8 scd_get_configured_address(void);
  *                              ambient pressure compensation (reverts to
  *                              altitude compensation, if set), 700-1200mBar
  *                              allowable range otherwise
+ *
  * @return                      0 if the command was successful, an error code
  *                              otherwise
  */
@@ -98,6 +101,7 @@ s16 scd_stop_periodic_measurement(void);
  *                      measurement
  * @param humidity      the address for the result of the relative humidity
  *                      measurement
+ *
  * @return              0 if the command was successful, an error code otherwise
  */
 s16 scd_read_measurement(f32 *co2_ppm, f32 *temperature, f32 *humidity);
@@ -112,6 +116,7 @@ s16 scd_read_measurement(f32 *co2_ppm, f32 *temperature, f32 *humidity);
  *
  * @param interval_sec  The measurement interval in seconds. The allowable range
  *                      is 2-1800s
+ *
  * @return              0 if the command was successful, an error code otherwise
  */
 s16 scd_set_measurement_interval(u16 interval_sec);
@@ -129,6 +134,7 @@ s16 scd_set_measurement_interval(u16 interval_sec);
  * @param data_ready    Pointer to memory of where to set the data ready bit.
  *                      The memory is set to 1 if a measurement is ready to be
  *                      fetched, 0 otherwise.
+ *
  * @return              0 if the command was successful, an error code otherwise
  */
 s16 scd_get_data_ready(u16 *data_ready);
@@ -147,6 +153,7 @@ s16 scd_get_data_ready(u16 *data_ready);
  *
  * @param temperature_offset    Temperature offset, unit [degrees Celsius * 100]
  *                              i.e. one tick corresponds to 0.01 degrees C
+ *
  * @return                      0 if the command was successful, an error code
  *                              otherwise
  */
@@ -164,6 +171,7 @@ s16 scd_set_temperature_offset(u16 temperature_offset);
  *
  * @param altitude  altitude in meters above sea level, 0 meters is the default
  *                  value and disables altitude compensation
+ *
  * @return          0 if the command was successful, an error code otherwise
  */
 s16 scd_set_altitude(u16 altitude);
