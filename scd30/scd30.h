@@ -176,6 +176,49 @@ s16 scd_set_temperature_offset(u16 temperature_offset);
  */
 s16 scd_set_altitude(u16 altitude);
 
+/**
+ * scd_enable_automatic_self_calibration() - Enable or disable the sensor's
+ * automatic self calibration
+ *
+ * When activated for the first time a period of minimum 7 days is needed so
+ * that the algorithm can find its initial parameter set for ASC.
+ * The sensor has to be exposed to fresh air for at least 1 hour every day.
+ * Refer to the datasheet for further conditions
+ *
+ * ASC status is saved in non-volatile memory. When the sensor is powered down
+ * while ASC is activated SCD30 will continue with automatic self-calibration
+ * after repowering without sending the command.
+ *
+ * @param enable_asc    enable ASC if non-zero, disable otherwise
+ *
+ * @return              0 if the command was successful, an error code otherwise
+ */
+s16 scd_enable_automatic_self_calibration(u8 enable_asc);
+
+/**
+ * scd_set_forced_recalibration() - Forcibly recalibrate the sensor to a known
+ * value.
+ *
+ * Forced recalibration (FRC) is used to compensate for sensor drifts when a
+ * reference value of the CO2 concentration in close proximity to the SCD30 is
+ * available.
+ *
+ * For best results the sensor has to be run in a stable environment in
+ * continuous mode at a measurement rate of 2s for at least two minutes before
+ * applying the calibration command and sending the reference value.
+ * Setting a reference CO2 concentration will overwrite the settings from ASC
+ * (see scd_enable_automatic_self_calibration) and vice-versa. The reference CO2
+ * concentration has to be in the range 400..2000 ppm.
+ *
+ * FRC value is saved in non-volatile memory, the last set FRC value will be
+ * used for field-calibration after repowering.
+ *
+ * @param co2_ppm   recalibrate to this specific co2 concentration
+ *
+ * @return          0 if the command was successful, an error code otherwise
+ */
+s16 scd_set_forced_recalibration(u16 co2_ppm);
+
 #ifdef __cplusplus
 }
 #endif
