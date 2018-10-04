@@ -55,6 +55,7 @@ static const u8 SCD_I2C_ADDRESS = 0x61;
 #define SCD_WORD_LEN     2
 #define SCD_COMMAND_LEN  2
 #define SCD_MAX_BUFFER_WORDS 24
+#define SCD_CMD_SINGLE_WORD_BUF_LEN (SCD_COMMAND_LEN + SCD_WORD_LEN + CRC8_LEN)
 
 
 /**
@@ -161,8 +162,7 @@ static s16 scd_i2c_read_words_from_cmd(u16 cmd, u16 *data_words,
 
 
 s16 scd_start_periodic_measurement(u16 ambient_pressure_mbar) {
-    const u16 BUF_SIZE = SCD_COMMAND_LEN + SCD_WORD_LEN + CRC8_LEN;
-    u8 buf[BUF_SIZE];
+    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
 
     if (ambient_pressure_mbar && (ambient_pressure_mbar < 700 ||
                                   ambient_pressure_mbar > 1400)) {
@@ -174,7 +174,7 @@ s16 scd_start_periodic_measurement(u16 ambient_pressure_mbar) {
                           &ambient_pressure_mbar,
                           sizeof(ambient_pressure_mbar) / SCD_WORD_LEN);
 
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, BUF_SIZE);
+    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
 }
 
 
@@ -213,8 +213,7 @@ s16 scd_read_measurement(f32 *co2_ppm, f32 *temperature, f32 *humidity) {
 
 
 s16 scd_set_measurement_interval(u16 interval_sec) {
-    const u16 BUF_SIZE = SCD_COMMAND_LEN + SCD_WORD_LEN + CRC8_LEN;
-    u8 buf[BUF_SIZE];
+    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
 
     if (interval_sec < 2 || interval_sec > 1800) {
         /* out of allowable range */
@@ -224,7 +223,7 @@ s16 scd_set_measurement_interval(u16 interval_sec) {
     scd_fill_cmd_send_buf(buf, SCD_CMD_SET_MEASUREMENT_INTERVAL, &interval_sec,
                           sizeof(interval_sec) / SCD_WORD_LEN);
 
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, BUF_SIZE);
+    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
 }
 
 
@@ -235,48 +234,44 @@ s16 scd_get_data_ready(u16 *data_ready) {
 
 
 s16 scd_set_temperature_offset(u16 temperature_offset) {
-    const u16 BUF_SIZE = SCD_COMMAND_LEN + SCD_WORD_LEN + CRC8_LEN;
-    u8 buf[BUF_SIZE];
+    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
 
     scd_fill_cmd_send_buf(buf, SCD_CMD_SET_TEMPERATURE_OFFSET,
                           &temperature_offset,
                           sizeof(temperature_offset) / SCD_WORD_LEN);
 
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, BUF_SIZE);
+    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
 }
 
 
 s16 scd_set_altitude(u16 altitude) {
-    const u16 BUF_SIZE = SCD_COMMAND_LEN + SCD_WORD_LEN + CRC8_LEN;
-    u8 buf[BUF_SIZE];
+    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
 
     scd_fill_cmd_send_buf(buf, SCD_CMD_SET_ALTITUDE, &altitude,
                           sizeof(altitude) / SCD_WORD_LEN);
 
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, BUF_SIZE);
+    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
 }
 
 
 s16 scd_enable_automatic_self_calibration(u8 enable_asc) {
-    const u16 BUF_SIZE = SCD_COMMAND_LEN + SCD_WORD_LEN + CRC8_LEN;
-    u8 buf[BUF_SIZE];
+    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
     u16 asc = !!enable_asc;
 
     scd_fill_cmd_send_buf(buf, SCD_CMD_SET_AUTO_SELF_CALIBRATION, &asc,
                           sizeof(asc) / SCD_WORD_LEN);
 
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, BUF_SIZE);
+    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
 }
 
 
 s16 scd_set_forced_recalibration(u16 co2_ppm) {
-    const u16 BUF_SIZE = SCD_COMMAND_LEN + SCD_WORD_LEN + CRC8_LEN;
-    u8 buf[BUF_SIZE];
+    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
 
     scd_fill_cmd_send_buf(buf, SCD_CMD_SET_FORCED_RECALIBRATION, &co2_ppm,
                           sizeof(co2_ppm) / SCD_WORD_LEN);
 
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, BUF_SIZE);
+    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
 }
 
 
