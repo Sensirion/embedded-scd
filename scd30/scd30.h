@@ -177,6 +177,20 @@ s16 scd_set_temperature_offset(u16 temperature_offset);
 s16 scd_set_altitude(u16 altitude);
 
 /**
+ * scd_get_automatic_self_calibration() - Read if the sensor's automatic self
+ * calibration is enabled or disabled
+ *
+ * See scd_enable_automatic_self_calibration() for more details.
+ *
+ * @param asc_enabled   Pointer to memory of where to set the self calibration
+ *                      state. 1 if ASC is enabled, 0 if ASC disabled. Remains
+ *                      untouched if return is non-zero.
+ *
+ * @return              0 if the command was successful, an error code otherwise
+ */
+s16 scd_get_automatic_self_calibration(u8 *asc_enabled);
+
+/**
  * scd_enable_automatic_self_calibration() - Enable or disable the sensor's
  * automatic self calibration
  *

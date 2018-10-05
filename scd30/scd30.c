@@ -49,8 +49,8 @@ static const u8 SCD_I2C_ADDRESS = 0x61;
 #define SCD_CMD_GET_DATA_READY              0x0202
 #define SCD_CMD_SET_TEMPERATURE_OFFSET      0x5403
 #define SCD_CMD_SET_ALTITUDE                0x5102
-#define SCD_CMD_SET_AUTO_SELF_CALIBRATION   0x5306
 #define SCD_CMD_SET_FORCED_RECALIBRATION    0x5204
+#define SCD_CMD_AUTO_SELF_CALIBRATION       0x5306
 
 #define SCD_WORD_LEN     2
 #define SCD_COMMAND_LEN  2
@@ -254,11 +254,24 @@ s16 scd_set_altitude(u16 altitude) {
 }
 
 
+s16 scd_get_automatic_self_calibration(u8 *asc_enabled) {
+    u16 word;
+    s16 ret;
+
+    ret = scd_i2c_read_words_from_cmd(SCD_CMD_AUTO_SELF_CALIBRATION,
+                                      &word, sizeof(word) / SCD_WORD_LEN);
+    if (ret == 0)
+        *asc_enabled = (u8)word;
+
+    return ret;
+}
+
+
 s16 scd_enable_automatic_self_calibration(u8 enable_asc) {
     u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
     u16 asc = !!enable_asc;
 
-    scd_fill_cmd_send_buf(buf, SCD_CMD_SET_AUTO_SELF_CALIBRATION, &asc,
+    scd_fill_cmd_send_buf(buf, SCD_CMD_AUTO_SELF_CALIBRATION, &asc,
                           sizeof(asc) / SCD_WORD_LEN);
 
     return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
