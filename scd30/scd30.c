@@ -185,27 +185,24 @@ s16 scd_stop_periodic_measurement() {
 
 s16 scd_read_measurement(f32 *co2_ppm, f32 *temperature, f32 *humidity) {
     s16 ret;
-    u16 word_buf[6]; /* 2 words for each co2, temperature, humidity */
+    u32 word_buf[3]; /* 32bit or 2 words for each co2, temperature, humidity */
     union {
         u32 raw;
         f32 float32;
     } tmp;
 
-    ret = scd_i2c_read_words_from_cmd(SCD_CMD_READ_MEASUREMENT, word_buf,
+    ret = scd_i2c_read_words_from_cmd(SCD_CMD_READ_MEASUREMENT, (u16 *)word_buf,
                                       sizeof(word_buf) / SCD_WORD_LEN);
     if (ret != STATUS_OK)
         return ret;
 
-    tmp.raw = (((u32)be16_to_cpu(word_buf[0])) << 16) |
-               ((u32)be16_to_cpu(word_buf[1]));
+    tmp.raw = be32_to_cpu(word_buf[0]);
     *co2_ppm = tmp.float32;
 
-    tmp.raw = (((u32)be16_to_cpu(word_buf[2])) << 16) |
-               ((u32)be16_to_cpu(word_buf[3]));
+    tmp.raw = be32_to_cpu(word_buf[1]);
     *temperature = tmp.float32;
 
-    tmp.raw = (((u32)be16_to_cpu(word_buf[4])) << 16) |
-               ((u32)be16_to_cpu(word_buf[5]));
+    tmp.raw = be32_to_cpu(word_buf[2]);
     *humidity = tmp.float32;
 
     return STATUS_OK;
