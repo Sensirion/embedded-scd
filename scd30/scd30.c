@@ -52,134 +52,28 @@ static const u8 SCD_I2C_ADDRESS = 0x61;
 #define SCD_CMD_SET_FORCED_RECALIBRATION    0x5204
 #define SCD_CMD_AUTO_SELF_CALIBRATION       0x5306
 
-#define SCD_WORD_LEN     2
-#define SCD_COMMAND_LEN  2
 #define SCD_MAX_BUFFER_WORDS 24
-#define SCD_CMD_SINGLE_WORD_BUF_LEN (SCD_COMMAND_LEN + SCD_WORD_LEN + CRC8_LEN)
-
-
-/**
- * scd_i2c_read_words() - read data words from sensor
- *
- * @data:       Allocated buffer to store the read data.
- *              The buffer may also have been modified on STATUS_FAIL return.
- * @data_words: Number of data words to read (without CRC bytes)
- *
- * @return      STATUS_OK on success, an error code otherwise
- */
-static s16 scd_i2c_read_words(u16 *data, u16 data_words) {
-    s16 ret;
-    u16 i, j;
-    u16 size = data_words * (SCD_WORD_LEN + CRC8_LEN);
-    u16 word_buf[SCD_MAX_BUFFER_WORDS];
-    u8 * const buf8 = (u8 *)word_buf;
-
-    ret = sensirion_i2c_read(SCD_I2C_ADDRESS, buf8, size);
-    if (ret != STATUS_OK)
-        return ret;
-
-    /* check the CRC for each word */
-    for (i = 0, j = 0;
-         i < size;
-         i += SCD_WORD_LEN + CRC8_LEN, j += SCD_WORD_LEN) {
-
-        if (sensirion_common_check_crc(&buf8[i], SCD_WORD_LEN,
-                                       buf8[i + SCD_WORD_LEN]) == STATUS_FAIL) {
-            return STATUS_FAIL;
-        }
-        ((u8 *)data)[j]     = buf8[i];
-        ((u8 *)data)[j + 1] = buf8[i + 1];
-    }
-
-    return STATUS_OK;
-}
-
-
-/**
- * scd_fill_cmd_send_buf() - create the i2c send buffer for a command and a set
- *                           of argument words.
- *                           The output buffer interleaves argument words with
- *                           their checksums.
- * @buf:        The generated buffer to send over i2c. Then buffer length must
- *              be at least SCD_COMMAND_LEN + num_args * (SCD_WORD_LEN +
- *              CRC8_LEN).
- * @cmd:        The i2c command to send. It already includes a checksum.
- * @args:       The arguments to the command. Can be NULL if none.
- * @num_args:   The number of word arguments in args.
- */
-static void scd_fill_cmd_send_buf(u8 *buf, u16 cmd, const u16 *args,
-                                  u8 num_args) {
-    u8 crc;
-    u8 i;
-    u8 idx = 0;
-
-    buf[idx++] = (u8)((cmd & 0xFF00) >> 8);
-    buf[idx++] = (u8)((cmd & 0x00FF) >> 0);
-
-    for (i = 0; i < num_args; ++i) {
-        crc = sensirion_common_generate_crc((u8 *)&args[i], SCD_WORD_LEN);
-
-        buf[idx++] = (u8)((args[i] & 0xFF00) >> 8);
-        buf[idx++] = (u8)((args[i] & 0x00FF) >> 0);
-        buf[idx++] = crc;
-    }
-}
-
-
-/**
- * scd_i2c_write() - writes to the sensor
- * @command:    Sensor command
- *
- * @return      STATUS_OK on success, an error code otherwise
- */
-static s16 scd_i2c_write(u16 command) {
-    u8 buf[SCD_COMMAND_LEN];
-
-    scd_fill_cmd_send_buf(buf, command, NULL, 0);
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, SCD_COMMAND_LEN);
-}
-
-
-/**
- * scd_i2c_read_words_from_cmd() - reads data words from the sensor after a
- *                                 command has been issued
- * @cmd:        Command
- * @data_words: Allocated buffer to store the read data
- * @num_words:  Data words to read (without CRC bytes)
- *
- * @return      STATUS_OK on success, an error code otherwise
- */
-static s16 scd_i2c_read_words_from_cmd(u16 cmd, u16 *data_words,
-                                       u16 num_words) {
-
-    s16 ret = scd_i2c_write(cmd);
-
-    if (ret != STATUS_OK)
-        return ret;
-
-    return scd_i2c_read_words(data_words, num_words);
-}
+#define SCD_CMD_SINGLE_WORD_BUF_LEN (SENSIRION_COMMAND_SIZE + \
+                                     SENSIRION_WORD_SIZE + CRC8_LEN)
 
 
 s16 scd_start_periodic_measurement(u16 ambient_pressure_mbar) {
-    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
-
     if (ambient_pressure_mbar && (ambient_pressure_mbar < 700 ||
                                   ambient_pressure_mbar > 1400)) {
         /* out of allowable range */
         return STATUS_FAIL;
     }
 
-    scd_fill_cmd_send_buf(buf, SCD_CMD_START_PERIODIC_MEASUREMENT,
-                          &ambient_pressure_mbar,
-                          sizeof(ambient_pressure_mbar) / SCD_WORD_LEN);
-
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
+    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                             SCD_CMD_START_PERIODIC_MEASUREMENT,
+                                             &ambient_pressure_mbar,
+                                             SENSIRION_NUM_WORDS(ambient_pressure_mbar));
 }
 
 
 s16 scd_stop_periodic_measurement() {
-    return scd_i2c_write(SCD_CMD_STOP_PERIODIC_MEASUREMENT);
+    return sensirion_i2c_write_cmd(SCD_I2C_ADDRESS,
+                                   SCD_CMD_STOP_PERIODIC_MEASUREMENT);
 }
 
 
@@ -191,8 +85,9 @@ s16 scd_read_measurement(f32 *co2_ppm, f32 *temperature, f32 *humidity) {
         f32 float32;
     } tmp;
 
-    ret = scd_i2c_read_words_from_cmd(SCD_CMD_READ_MEASUREMENT, (u16 *)word_buf,
-                                      sizeof(word_buf) / SCD_WORD_LEN);
+    ret = sensirion_i2c_read_cmd(SCD_I2C_ADDRESS, SCD_CMD_READ_MEASUREMENT,
+                                 (u16 *)word_buf,
+                                 SENSIRION_NUM_WORDS(word_buf));
     if (ret != STATUS_OK)
         return ret;
 
@@ -210,44 +105,37 @@ s16 scd_read_measurement(f32 *co2_ppm, f32 *temperature, f32 *humidity) {
 
 
 s16 scd_set_measurement_interval(u16 interval_sec) {
-    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
-
     if (interval_sec < 2 || interval_sec > 1800) {
         /* out of allowable range */
         return STATUS_FAIL;
     }
 
-    scd_fill_cmd_send_buf(buf, SCD_CMD_SET_MEASUREMENT_INTERVAL, &interval_sec,
-                          sizeof(interval_sec) / SCD_WORD_LEN);
-
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
+    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                             SCD_CMD_SET_MEASUREMENT_INTERVAL,
+                                             &interval_sec,
+                                             SENSIRION_NUM_WORDS(interval_sec));
 }
 
 
 s16 scd_get_data_ready(u16 *data_ready) {
-    return scd_i2c_read_words_from_cmd(SCD_CMD_GET_DATA_READY, data_ready,
-                                       sizeof(*data_ready) / SCD_WORD_LEN);
+    return sensirion_i2c_read_cmd(SCD_I2C_ADDRESS, SCD_CMD_GET_DATA_READY,
+                                  data_ready,
+                                  SENSIRION_NUM_WORDS(*data_ready));
 }
 
 
 s16 scd_set_temperature_offset(u16 temperature_offset) {
-    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
-
-    scd_fill_cmd_send_buf(buf, SCD_CMD_SET_TEMPERATURE_OFFSET,
-                          &temperature_offset,
-                          sizeof(temperature_offset) / SCD_WORD_LEN);
-
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
+    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                             SCD_CMD_SET_TEMPERATURE_OFFSET,
+                                             &temperature_offset,
+                                             SENSIRION_NUM_WORDS(temperature_offset));
 }
 
 
 s16 scd_set_altitude(u16 altitude) {
-    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
-
-    scd_fill_cmd_send_buf(buf, SCD_CMD_SET_ALTITUDE, &altitude,
-                          sizeof(altitude) / SCD_WORD_LEN);
-
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
+    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                             SCD_CMD_SET_ALTITUDE, &altitude,
+                                             SENSIRION_NUM_WORDS(altitude));
 }
 
 
@@ -255,8 +143,8 @@ s16 scd_get_automatic_self_calibration(u8 *asc_enabled) {
     u16 word;
     s16 ret;
 
-    ret = scd_i2c_read_words_from_cmd(SCD_CMD_AUTO_SELF_CALIBRATION,
-                                      &word, sizeof(word) / SCD_WORD_LEN);
+    ret = sensirion_i2c_read_cmd(SCD_I2C_ADDRESS, SCD_CMD_AUTO_SELF_CALIBRATION,
+                                 &word, SENSIRION_NUM_WORDS(word));
     if (ret == 0)
         *asc_enabled = (u8)word;
 
@@ -265,23 +153,19 @@ s16 scd_get_automatic_self_calibration(u8 *asc_enabled) {
 
 
 s16 scd_enable_automatic_self_calibration(u8 enable_asc) {
-    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
     u16 asc = !!enable_asc;
 
-    scd_fill_cmd_send_buf(buf, SCD_CMD_AUTO_SELF_CALIBRATION, &asc,
-                          sizeof(asc) / SCD_WORD_LEN);
-
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
+    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                             SCD_CMD_AUTO_SELF_CALIBRATION,
+                                             &asc, SENSIRION_NUM_WORDS(asc));
 }
 
 
 s16 scd_set_forced_recalibration(u16 co2_ppm) {
-    u8 buf[SCD_CMD_SINGLE_WORD_BUF_LEN];
-
-    scd_fill_cmd_send_buf(buf, SCD_CMD_SET_FORCED_RECALIBRATION, &co2_ppm,
-                          sizeof(co2_ppm) / SCD_WORD_LEN);
-
-    return sensirion_i2c_write(SCD_I2C_ADDRESS, buf, sizeof(buf));
+    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                             SCD_CMD_SET_FORCED_RECALIBRATION,
+                                             &co2_ppm,
+                                             SENSIRION_NUM_WORDS(co2_ppm));
 }
 
 
