@@ -51,6 +51,7 @@ static const u8 SCD_I2C_ADDRESS = 0x61;
 #define SCD_CMD_SET_ALTITUDE                0x5102
 #define SCD_CMD_SET_FORCED_RECALIBRATION    0x5204
 #define SCD_CMD_AUTO_SELF_CALIBRATION       0x5306
+#define SCD_WRITE_DELAY_US                  20000
 
 #define SCD_MAX_BUFFER_WORDS 24
 #define SCD_CMD_SINGLE_WORD_BUF_LEN (SENSIRION_COMMAND_SIZE + \
@@ -105,15 +106,20 @@ s16 scd_read_measurement(f32 *co2_ppm, f32 *temperature, f32 *humidity) {
 
 
 s16 scd_set_measurement_interval(u16 interval_sec) {
+    s16 ret;
+
     if (interval_sec < 2 || interval_sec > 1800) {
         /* out of allowable range */
         return STATUS_FAIL;
     }
 
-    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
-                                             SCD_CMD_SET_MEASUREMENT_INTERVAL,
-                                             &interval_sec,
-                                             SENSIRION_NUM_WORDS(interval_sec));
+    ret = sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                            SCD_CMD_SET_MEASUREMENT_INTERVAL,
+                                            &interval_sec,
+                                            SENSIRION_NUM_WORDS(interval_sec));
+    sensirion_sleep_usec(SCD_WRITE_DELAY_US);
+
+    return ret;
 }
 
 
@@ -125,17 +131,27 @@ s16 scd_get_data_ready(u16 *data_ready) {
 
 
 s16 scd_set_temperature_offset(u16 temperature_offset) {
-    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
-                                             SCD_CMD_SET_TEMPERATURE_OFFSET,
-                                             &temperature_offset,
-                                             SENSIRION_NUM_WORDS(temperature_offset));
+    s16 ret;
+
+    ret = sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                            SCD_CMD_SET_TEMPERATURE_OFFSET,
+                                            &temperature_offset,
+                                            SENSIRION_NUM_WORDS(temperature_offset));
+    sensirion_sleep_usec(SCD_WRITE_DELAY_US);
+
+    return ret;
 }
 
 
 s16 scd_set_altitude(u16 altitude) {
-    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
-                                             SCD_CMD_SET_ALTITUDE, &altitude,
-                                             SENSIRION_NUM_WORDS(altitude));
+    s16 ret;
+
+    ret = sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                            SCD_CMD_SET_ALTITUDE, &altitude,
+                                            SENSIRION_NUM_WORDS(altitude));
+    sensirion_sleep_usec(SCD_WRITE_DELAY_US);
+
+    return ret;
 }
 
 
@@ -145,27 +161,38 @@ s16 scd_get_automatic_self_calibration(u8 *asc_enabled) {
 
     ret = sensirion_i2c_read_cmd(SCD_I2C_ADDRESS, SCD_CMD_AUTO_SELF_CALIBRATION,
                                  &word, SENSIRION_NUM_WORDS(word));
-    if (ret == 0)
-        *asc_enabled = (u8)word;
+    if (ret != STATUS_OK)
+        return ret;
+
+    *asc_enabled = (u8)word;
+
+    return STATUS_OK;
+}
+
+
+s16 scd_enable_automatic_self_calibration(u8 enable_asc) {
+    s16 ret;
+    u16 asc = !!enable_asc;
+
+    ret = sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                            SCD_CMD_AUTO_SELF_CALIBRATION,
+                                            &asc, SENSIRION_NUM_WORDS(asc));
+    sensirion_sleep_usec(SCD_WRITE_DELAY_US);
 
     return ret;
 }
 
 
-s16 scd_enable_automatic_self_calibration(u8 enable_asc) {
-    u16 asc = !!enable_asc;
-
-    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
-                                             SCD_CMD_AUTO_SELF_CALIBRATION,
-                                             &asc, SENSIRION_NUM_WORDS(asc));
-}
-
-
 s16 scd_set_forced_recalibration(u16 co2_ppm) {
-    return sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
-                                             SCD_CMD_SET_FORCED_RECALIBRATION,
-                                             &co2_ppm,
-                                             SENSIRION_NUM_WORDS(co2_ppm));
+    s16 ret;
+
+    ret = sensirion_i2c_write_cmd_with_args(SCD_I2C_ADDRESS,
+                                            SCD_CMD_SET_FORCED_RECALIBRATION,
+                                            &co2_ppm,
+                                            SENSIRION_NUM_WORDS(co2_ppm));
+    sensirion_sleep_usec(SCD_WRITE_DELAY_US);
+
+    return ret;
 }
 
 
