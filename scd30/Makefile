@@ -22,7 +22,7 @@ scd_git_version.o: ${scd_common_dir}/scd_git_version.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 sensirion_common.o: ${sensirion_common_dir}/sensirion_common.c
 	$(CC) $(CFLAGS) -c -o $@ $^
-sensirion_sw_i2c_implementation.o: ${sw_i2c_dir}/sample-implementations/linux_user_space/sensirion_sw_i2c_implementation.c
+sensirion_sw_i2c_implementation.o: ${sw_i2c_dir}/sensirion_sw_i2c_implementation.c
 	$(CC) -I${sw_i2c_dir} $(CFLAGS) -c -o $@ $^
 sensirion_hw_i2c_implementation.o: ${hw_i2c_dir}/sensirion_hw_i2c_implementation.c
 	$(CC) $(CFLAGS) -c -o $@ $^
