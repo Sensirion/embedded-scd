@@ -1,4 +1,4 @@
-# embedded-scd
+# embedded-scd [![CircleCI](https://circleci.com/gh/Sensirion/embedded-scd.svg?style=shield)](https://circleci.com/gh/Sensirion/embedded-scd) [![GitHub license](https://img.shields.io/badge/license-BSD3-blue.svg)](https://raw.githubusercontent.com/Sensirion/embedded-scd/master/LICENSE)
 This repository contains the embedded driver sources for Sensirion's SCD product
 line.
 
