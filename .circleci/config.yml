@@ -1,0 +1,22 @@
+version: 2
+
+jobs:
+  build:
+
+    docker:
+        - image: gcc:5.4.0
+
+    steps:
+      - checkout
+      - run:
+          name: update common repo
+          command: git submodule update --init
+      - run: apt update
+      - run: apt install -y zip
+      - run: make && make clean
+      - run:
+          name: make driver
+          command: |
+              make release
+              cd release/scd30 && make && make clean && cd -
+              make clean
