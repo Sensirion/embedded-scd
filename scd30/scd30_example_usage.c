@@ -41,10 +41,10 @@
 #define usleep(...)
 
 int main(void) {
-    f32 co2_ppm, temperature, relative_humidity;
-    u16 data_ready;
-    s16 ret;
-    s16 interval_in_seconds = 2;
+    float32_t co2_ppm, temperature, relative_humidity;
+    uint16_t data_ready;
+    int16_t ret;
+    int16_t interval_in_seconds = 2;
 
     /* Busy loop for initialization, because the main loop does not work without
      * a sensor.

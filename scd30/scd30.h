@@ -44,7 +44,7 @@ extern "C" {
  *
  * @return  0 on success, an error code otherwise.
  */
-s16 scd_probe(void);
+int16_t scd_probe(void);
 
 /**
  * scd_get_driver_version() - Returns the driver version
@@ -56,9 +56,9 @@ const char *scd_get_driver_version(void);
 /**
  * scd_get_configured_address() - Returns the configured I2C address
  *
- * @return      u8 I2C address
+ * @return      uint8_t I2C address
  */
-u8 scd_get_configured_address(void);
+uint8_t scd_get_configured_address(void);
 
 /**
  * scd_start_periodic_measurement() - Start continuous measurement to measure
@@ -81,14 +81,14 @@ u8 scd_get_configured_address(void);
  * @return                      0 if the command was successful, an error code
  *                              otherwise
  */
-s16 scd_start_periodic_measurement(u16 ambient_pressure_mbar);
+int16_t scd_start_periodic_measurement(uint16_t ambient_pressure_mbar);
 
 /**
  * scd_stop_periodic_measurement() - Stop the continuous measurement
  *
  * @return  0 if the command was successful, else an error code
  */
-s16 scd_stop_periodic_measurement(void);
+int16_t scd_stop_periodic_measurement(void);
 
 /**
  * scd_read_measurement() - Read out an available measurement when new
@@ -104,7 +104,8 @@ s16 scd_stop_periodic_measurement(void);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-s16 scd_read_measurement(f32 *co2_ppm, f32 *temperature, f32 *humidity);
+int16_t scd_read_measurement(float32_t *co2_ppm, float32_t *temperature,
+                             float32_t *humidity);
 
 /**
  * scd_set_measurement_interval() - Sets the measurement interval in continuous
@@ -119,7 +120,7 @@ s16 scd_read_measurement(f32 *co2_ppm, f32 *temperature, f32 *humidity);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-s16 scd_set_measurement_interval(u16 interval_sec);
+int16_t scd_set_measurement_interval(uint16_t interval_sec);
 
 /**
  * scd_get_data_ready() - Get data ready status
@@ -137,7 +138,7 @@ s16 scd_set_measurement_interval(u16 interval_sec);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-s16 scd_get_data_ready(u16 *data_ready);
+int16_t scd_get_data_ready(uint16_t *data_ready);
 
 /**
  * scd_set_temperature_offset() - Set the temperature offset
@@ -157,7 +158,7 @@ s16 scd_get_data_ready(u16 *data_ready);
  * @return                      0 if the command was successful, an error code
  *                              otherwise
  */
-s16 scd_set_temperature_offset(u16 temperature_offset);
+int16_t scd_set_temperature_offset(uint16_t temperature_offset);
 
 /**
  * scd_set_altitude() - Set the altitude above sea level
@@ -174,7 +175,7 @@ s16 scd_set_temperature_offset(u16 temperature_offset);
  *
  * @return          0 if the command was successful, an error code otherwise
  */
-s16 scd_set_altitude(u16 altitude);
+int16_t scd_set_altitude(uint16_t altitude);
 
 /**
  * scd_get_automatic_self_calibration() - Read if the sensor's automatic self
@@ -188,7 +189,7 @@ s16 scd_set_altitude(u16 altitude);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-s16 scd_get_automatic_self_calibration(u8 *asc_enabled);
+int16_t scd_get_automatic_self_calibration(uint8_t *asc_enabled);
 
 /**
  * scd_enable_automatic_self_calibration() - Enable or disable the sensor's
@@ -207,7 +208,7 @@ s16 scd_get_automatic_self_calibration(u8 *asc_enabled);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-s16 scd_enable_automatic_self_calibration(u8 enable_asc);
+int16_t scd_enable_automatic_self_calibration(uint8_t enable_asc);
 
 /**
  * scd_set_forced_recalibration() - Forcibly recalibrate the sensor to a known
@@ -231,7 +232,7 @@ s16 scd_enable_automatic_self_calibration(u8 enable_asc);
  *
  * @return          0 if the command was successful, an error code otherwise
  */
-s16 scd_set_forced_recalibration(u16 co2_ppm);
+int16_t scd_set_forced_recalibration(uint16_t co2_ppm);
 
 #ifdef __cplusplus
 }
