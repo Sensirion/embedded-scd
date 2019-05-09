@@ -34,15 +34,13 @@
 /* TO USE CONSOLE OUTPUT (printf) AND WAIT (sleep/usleep) PLEASE ADAPT THEM TO
  * YOUR PLATFORM, OR REMOVE THE DEFINES BELOW TO USE AS-IS.
  */
-#include <stdio.h> /* printf */
+#include <stdio.h>  /* printf */
 #include <unistd.h> /* sleep, usleep */
 #define printf(...)
 #define sleep(...)
 #define usleep(...)
 
-
-int main(void)
-{
+int main(void) {
     f32 co2_ppm, temperature, relative_humidity;
     u16 data_ready;
     s16 ret;
