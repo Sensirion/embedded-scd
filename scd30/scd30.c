@@ -193,9 +193,6 @@ uint8_t scd_get_configured_address() {
 int16_t scd_probe() {
     uint16_t data_ready;
 
-    /* Initialize I2C */
-    sensirion_i2c_init();
-
     /* try to read data-ready state */
     return scd_get_data_ready(&data_ready);
 }
