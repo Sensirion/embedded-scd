@@ -40,28 +40,28 @@ extern "C" {
 #endif
 
 /**
- * scd_probe() - check if the SCD sensor is available and initialize it
+ * scd30_probe() - check if the SCD sensor is available and initialize it
  *
  * @return  0 on success, an error code otherwise.
  */
-int16_t scd_probe(void);
+int16_t scd30_probe(void);
 
 /**
- * scd_get_driver_version() - Returns the driver version
+ * scd30_get_driver_version() - Returns the driver version
  *
  * @return  Driver version string
  */
-const char *scd_get_driver_version(void);
+const char *scd30_get_driver_version(void);
 
 /**
- * scd_get_configured_address() - Returns the configured I2C address
+ * scd30_get_configured_address() - Returns the configured I2C address
  *
  * @return      uint8_t I2C address
  */
-uint8_t scd_get_configured_address(void);
+uint8_t scd30_get_configured_address(void);
 
 /**
- * scd_start_periodic_measurement() - Start continuous measurement to measure
+ * scd30_start_periodic_measurement() - Start continuous measurement to measure
  * CO2 concentration, relative humidity and temperature or updates the ambient
  * pressure if the periodic measurement is already running.
  *
@@ -81,20 +81,20 @@ uint8_t scd_get_configured_address(void);
  * @return                      0 if the command was successful, an error code
  *                              otherwise
  */
-int16_t scd_start_periodic_measurement(uint16_t ambient_pressure_mbar);
+int16_t scd30_start_periodic_measurement(uint16_t ambient_pressure_mbar);
 
 /**
- * scd_stop_periodic_measurement() - Stop the continuous measurement
+ * scd30_stop_periodic_measurement() - Stop the continuous measurement
  *
  * @return  0 if the command was successful, else an error code
  */
-int16_t scd_stop_periodic_measurement(void);
+int16_t scd30_stop_periodic_measurement(void);
 
 /**
- * scd_read_measurement() - Read out an available measurement when new
+ * scd30_read_measurement() - Read out an available measurement when new
  * measurement data is available.
  * Make sure that the measurement is completed by reading the data ready status
- * bit with scd_get_data_ready().
+ * bit with scd30_get_data_ready().
  *
  * @param co2_ppm       CO2 concentration in ppm
  * @param temperature   the address for the result of the temperature
@@ -104,12 +104,12 @@ int16_t scd_stop_periodic_measurement(void);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-int16_t scd_read_measurement(float32_t *co2_ppm, float32_t *temperature,
-                             float32_t *humidity);
+int16_t scd30_read_measurement(float32_t *co2_ppm, float32_t *temperature,
+                               float32_t *humidity);
 
 /**
- * scd_set_measurement_interval() - Sets the measurement interval in continuous
- * measurement mode.
+ * scd30_set_measurement_interval() - Sets the measurement interval in
+ * continuous measurement mode.
  *
  * The initial value on powerup is 2s. The chosen measurement interval is saved
  * in non-volatile memory and thus is not reset to its initial value after power
@@ -120,17 +120,17 @@ int16_t scd_read_measurement(float32_t *co2_ppm, float32_t *temperature,
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-int16_t scd_set_measurement_interval(uint16_t interval_sec);
+int16_t scd30_set_measurement_interval(uint16_t interval_sec);
 
 /**
- * scd_get_data_ready() - Get data ready status
+ * scd30_get_data_ready() - Get data ready status
  *
  * Data ready command is used to determine if a measurement can be read from the
  * sensor's buffer. Whenever there is a measurement available from the internal
  * buffer this command returns 1 and 0 otherwise. As soon as the measurement has
  * been read by the return value changes to 0. It is recommended to use the data
  * ready status byte before readout of the measurement values with
- * scd_read_measurement().
+ * scd30_read_measurement().
  *
  * @param data_ready    Pointer to memory of where to set the data ready bit.
  *                      The memory is set to 1 if a measurement is ready to be
@@ -138,10 +138,10 @@ int16_t scd_set_measurement_interval(uint16_t interval_sec);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-int16_t scd_get_data_ready(uint16_t *data_ready);
+int16_t scd30_get_data_ready(uint16_t *data_ready);
 
 /**
- * scd_set_temperature_offset() - Set the temperature offset
+ * scd30_set_temperature_offset() - Set the temperature offset
  *
  * The on-board RH/T sensor is influenced by thermal self-heating of SCD30 and
  * other electrical components. Design-in alters the thermal properties of SCD30
@@ -158,15 +158,15 @@ int16_t scd_get_data_ready(uint16_t *data_ready);
  * @return                      0 if the command was successful, an error code
  *                              otherwise
  */
-int16_t scd_set_temperature_offset(uint16_t temperature_offset);
+int16_t scd30_set_temperature_offset(uint16_t temperature_offset);
 
 /**
- * scd_set_altitude() - Set the altitude above sea level
+ * scd30_set_altitude() - Set the altitude above sea level
  *
  * Measurements of CO2 concentration are influenced by altitude. When a value is
  * set, the altitude-effect is compensated. The altitude setting is disregarded
  * when an ambient pressure is set on the sensor with
- * scd_start_periodic_measurement.
+ * scd30_start_periodic_measurement.
  * The altitude is saved in non-volatile memory. The last set value will be used
  * after repowering.
  *
@@ -175,13 +175,13 @@ int16_t scd_set_temperature_offset(uint16_t temperature_offset);
  *
  * @return          0 if the command was successful, an error code otherwise
  */
-int16_t scd_set_altitude(uint16_t altitude);
+int16_t scd30_set_altitude(uint16_t altitude);
 
 /**
- * scd_get_automatic_self_calibration() - Read if the sensor's automatic self
+ * scd30_get_automatic_self_calibration() - Read if the sensor's automatic self
  * calibration is enabled or disabled
  *
- * See scd_enable_automatic_self_calibration() for more details.
+ * See scd30_enable_automatic_self_calibration() for more details.
  *
  * @param asc_enabled   Pointer to memory of where to set the self calibration
  *                      state. 1 if ASC is enabled, 0 if ASC disabled. Remains
@@ -189,10 +189,10 @@ int16_t scd_set_altitude(uint16_t altitude);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-int16_t scd_get_automatic_self_calibration(uint8_t *asc_enabled);
+int16_t scd30_get_automatic_self_calibration(uint8_t *asc_enabled);
 
 /**
- * scd_enable_automatic_self_calibration() - Enable or disable the sensor's
+ * scd30_enable_automatic_self_calibration() - Enable or disable the sensor's
  * automatic self calibration
  *
  * When activated for the first time a period of minimum 7 days is needed so
@@ -208,10 +208,10 @@ int16_t scd_get_automatic_self_calibration(uint8_t *asc_enabled);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-int16_t scd_enable_automatic_self_calibration(uint8_t enable_asc);
+int16_t scd30_enable_automatic_self_calibration(uint8_t enable_asc);
 
 /**
- * scd_set_forced_recalibration() - Forcibly recalibrate the sensor to a known
+ * scd30_set_forced_recalibration() - Forcibly recalibrate the sensor to a known
  * value.
  *
  * Forced recalibration (FRC) is used to compensate for sensor drifts when a
@@ -222,8 +222,8 @@ int16_t scd_enable_automatic_self_calibration(uint8_t enable_asc);
  * continuous mode at a measurement rate of 2s for at least two minutes before
  * applying the calibration command and sending the reference value.
  * Setting a reference CO2 concentration will overwrite the settings from ASC
- * (see scd_enable_automatic_self_calibration) and vice-versa. The reference CO2
- * concentration has to be in the range 400..2000 ppm.
+ * (see scd30_enable_automatic_self_calibration) and vice-versa. The reference
+ * CO2 concentration has to be in the range 400..2000 ppm.
  *
  * FRC value is saved in non-volatile memory, the last set FRC value will be
  * used for field-calibration after repowering.
@@ -232,7 +232,7 @@ int16_t scd_enable_automatic_self_calibration(uint8_t enable_asc);
  *
  * @return          0 if the command was successful, an error code otherwise
  */
-int16_t scd_set_forced_recalibration(uint16_t co2_ppm);
+int16_t scd30_set_forced_recalibration(uint16_t co2_ppm);
 
 #ifdef __cplusplus
 }

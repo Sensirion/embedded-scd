@@ -52,26 +52,26 @@ int main(void) {
     /* Busy loop for initialization, because the main loop does not work without
      * a sensor.
      */
-    while (scd_probe() != STATUS_OK) {
+    while (scd30_probe() != STATUS_OK) {
         printf("SCD30 sensor probing failed\n");
         sleep(1);
     }
     printf("SCD30 sensor probing successful\n");
 
-    scd_set_measurement_interval(interval_in_seconds);
+    scd30_set_measurement_interval(interval_in_seconds);
     usleep(20000);
-    scd_start_periodic_measurement(0);
+    scd30_start_periodic_measurement(0);
     sleep(interval_in_seconds);
 
     while (1) {
         /* Measure co2, temperature and relative humidity and store into
          * variables.
          */
-        ret = scd_get_data_ready(&data_ready);
+        ret = scd30_get_data_ready(&data_ready);
         if (ret == STATUS_OK) {
             if (data_ready) {
-                ret = scd_read_measurement(&co2_ppm, &temperature,
-                                           &relative_humidity);
+                ret = scd30_read_measurement(&co2_ppm, &temperature,
+                                             &relative_humidity);
                 if (ret != STATUS_OK) {
                     printf("error reading measurement\n");
 
@@ -94,6 +94,6 @@ int main(void) {
         sleep(interval_in_seconds);
     }
 
-    scd_stop_periodic_measurement();
+    scd30_stop_periodic_measurement();
     return 0;
 }
