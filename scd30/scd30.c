@@ -50,6 +50,8 @@ static const uint8_t SCD30_I2C_ADDRESS = 0x61;
 #define SCD30_CMD_SET_ALTITUDE 0x5102
 #define SCD30_CMD_SET_FORCED_RECALIBRATION 0x5204
 #define SCD30_CMD_AUTO_SELF_CALIBRATION 0x5306
+#define SCD30_CMD_READ_SERIAL 0xD033
+#define SCD30_SERIAL_NUM_WORDS 16
 #define SCD30_WRITE_DELAY_US 20000
 
 #define SCD30_MAX_BUFFER_WORDS 24
@@ -180,6 +182,20 @@ int16_t scd30_set_forced_recalibration(uint16_t co2_ppm) {
         SENSIRION_NUM_WORDS(co2_ppm));
     sensirion_sleep_usec(SCD30_WRITE_DELAY_US);
 
+    return ret;
+}
+
+int16_t scd30_read_serial(char *serial) {
+    int16_t ret;
+
+    ret = sensirion_i2c_write_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_READ_SERIAL);
+    if (ret)
+        return ret;
+
+    sensirion_sleep_usec(SCD30_WRITE_DELAY_US);
+    ret = sensirion_i2c_read_bytes(SCD30_I2C_ADDRESS, (uint8_t *)serial,
+                                   SCD30_SERIAL_NUM_WORDS);
+    serial[2 * SCD30_SERIAL_NUM_WORDS] = '\0';
     return ret;
 }
 

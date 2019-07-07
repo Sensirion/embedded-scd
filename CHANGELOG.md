@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  * [`changed`]  Functions are now dedicated per sensor (e.g. `scd30_probe()`
                 instead of `scd_probe()`)
  * [`changed`]  Move the i2c init call out of `probe()` and into the example
+ * [`added`]    Add `scd30_read_serial()` to read out the serial number
 
 ## [1.0.0] - 2019-05-14
 
