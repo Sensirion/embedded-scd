@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 instead of `scd_probe()`)
  * [`changed`]  Move the i2c init call out of `probe()` and into the example
  * [`added`]    Add `scd30_read_serial()` to read out the serial number
+ * [`added`]    embedded-common: Add multi-bus support along with an example.
 
 ## [1.0.0] - 2019-05-14
 
