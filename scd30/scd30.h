@@ -234,6 +234,27 @@ int16_t scd30_enable_automatic_self_calibration(uint8_t enable_asc);
  */
 int16_t scd30_set_forced_recalibration(uint16_t co2_ppm);
 
+/**
+ * Read out the serial number
+ *
+ * @param serial    the address for the result of the serial number.
+ *                  --------------------------------------
+ *                  THE BUFFER MUST HOLD AT LEAST 33 BYTES
+ *                  --------------------------------------
+ *                  Usage example:
+ *                  ```
+ *                  char scd30_serial[33];
+ *                  if (scd30_read_serial(scd30_serial) == 0) {
+ *                      printf("SCD30 serial: %s\n", scd30_serial);
+ *                  } else {
+ *                      printf("Error reading SCD30 serial\n");
+ *                  }
+ *                  ```
+ *                  Contains a zero-terminated string.
+ * @return          0 if the command was successful, else an error code.
+ */
+int16_t scd30_read_serial(char *serial);
+
 #ifdef __cplusplus
 }
 #endif
