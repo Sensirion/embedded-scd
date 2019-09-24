@@ -10,8 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  * [`changed`]  Move the i2c init call out of `probe()` and into the example
  * [`added`]    Add `scd30_read_serial()` to read out the serial number
  * [`added`]    embedded-common: Add multi-bus support along with an example.
- * [`fixed`] Fix compilation warnings when compiling the linux user space
-             sample implementation with `CONFIG_I"C_TYPE` set to `sw_i2c`
+ * [`fixed`]    Fix compilation warnings when compiling the linux user space
+                sample implementation with `CONFIG_I"C_TYPE` set to `sw_i2c`
+ * [`changed`]  Split out `default_config.inc` from Makefile to configure paths
+                and CFLAGS for the SCD30 driver
+ * [`changed`]  Only one example with either `hw_i2c` or `sw_i2c` is build,
+                depending on `CONFIG_I2C_TYPE`. Defaults to `hw_i2c`.
 
 ## [1.0.0] - 2019-05-14
 

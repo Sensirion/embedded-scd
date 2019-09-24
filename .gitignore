@@ -1,5 +1,5 @@
 *.o
 /release
-/scd30/scd_git_version.c
-/scd30/scd30_example_usage_hw_i2c
-/scd30/scd30_example_usage_sw_i2c
+/scd-common/scd_git_version.c
+/scd30/scd30_example_usage
+/scd30/user_config.inc
