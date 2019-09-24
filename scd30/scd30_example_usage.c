@@ -36,15 +36,12 @@
  */
 #include <stdio.h>  /* printf */
 #include <unistd.h> /* sleep, usleep */
-#define printf(...)
-#define sleep(...)
-#define usleep(...)
 
 int main(void) {
     float32_t co2_ppm, temperature, relative_humidity;
     uint16_t data_ready;
     int16_t ret;
-    int16_t interval_in_seconds = 2;
+    uint16_t interval_in_seconds = 2;
 
     /* Initialize I2C */
     sensirion_i2c_init();
