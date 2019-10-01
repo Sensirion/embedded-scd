@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2019-10-01
+
  * [`changed`]  Functions are now dedicated per sensor (e.g. `scd30_probe()`
                 instead of `scd_probe()`)
  * [`changed`]  Move the i2c init call out of `probe()` and into the example
@@ -38,7 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  * Initial support for SCD30
 
-[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/1.0.0...master
+[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/2.0.0...master
+[2.0.0]: https://github.com/Sensirion/embedded-scd/compare/1.0.0...2.0.0
 [1.0.0]: https://github.com/Sensirion/embedded-scd/compare/0.9.0...1.0.0
 [0.9.0]: https://github.com/Sensirion/embedded-scd/compare/0.1.0...0.9.0
 [0.1.0]: https://github.com/Sensirion/embedded-scd/releases/tag/0.1.0
