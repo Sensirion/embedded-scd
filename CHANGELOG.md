@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 depending on `CONFIG_I2C_TYPE`. Defaults to `hw_i2c`.
  * [`fixed`]    Fix clock stretching timeout that might occur when
                 `CONFIG_I2C_TYPE` is set to `sw_i2c`
+ * [`fixed`]    Copy correct `AUTHORS`, `CHANGELOG.md`, `LICENSE`, and
+                `README.md` files to target locations when running the `release`
+                target of the driver's root Makefile.
 
 ## [1.0.0] - 2019-05-14
 
