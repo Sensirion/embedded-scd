@@ -29,6 +29,7 @@ $(release_drivers): scd-common/scd_git_version.c
 	cp -r embedded-common/* "$${pkgdir}" && \
 	cp -r scd-common/* "$${pkgdir}" && \
 	cp -r $${driver}/* "$${pkgdir}" && \
+	cp AUTHORS CHANGELOG.md README.md LICENSE "$${pkgdir}" && \
 	echo 'scd_driver_dir = .' >> $${pkgdir}/user_config.inc && \
 	echo 'scd_common_dir = .' >> $${pkgdir}/user_config.inc && \
 	echo 'sensirion_common_dir = .' >> $${pkgdir}/user_config.inc && \
