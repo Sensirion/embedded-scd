@@ -80,16 +80,15 @@ int16_t scd30_read_measurement(float32_t *co2_ppm, float32_t *temperature,
     union {
         uint32_t u32_value;
         float32_t float32;
-        uint16_t words[2];
+        uint8_t bytes[4];
     } tmp, data[3];
 
-    ret = sensirion_i2c_read_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_READ_MEASUREMENT,
-                                 data->words, SENSIRION_NUM_WORDS(data));
+    ret = sensirion_i2c_write_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_READ_MEASUREMENT);
     if (ret != STATUS_OK)
         return ret;
-
-    /* Revert to be16 for be32 conversion below */
-    SENSIRION_WORDS_TO_BYTES(data->words, SENSIRION_NUM_WORDS(data));
+    ret = sensirion_i2c_read_bytes(SCD30_I2C_ADDRESS, data->bytes, sizeof(data));
+    if (ret != STATUS_OK)
+        return ret;
 
     tmp.u32_value = be32_to_cpu(data[0].u32_value);
     *co2_ppm = tmp.float32;

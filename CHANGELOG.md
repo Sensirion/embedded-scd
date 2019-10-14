@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  * [`removed`]  Remove the `AUTHORS` file from the driver and the
                 `embedded-common` submodule, as it adds more noise than benefit.
                 The contributors can be found in the git log.
+ * ['changed']  Avoid converting twice between endianness in
+                `scd30_read_measurement`. (improves performance and portablity)
 
 ## [2.0.0] - 2019-10-01
 
