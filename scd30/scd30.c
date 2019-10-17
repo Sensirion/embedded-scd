@@ -84,10 +84,12 @@ int16_t scd30_read_measurement(float32_t *co2_ppm, float32_t *temperature,
         uint8_t bytes[4];
     } tmp, data[3];
 
-    ret = sensirion_i2c_write_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_READ_MEASUREMENT);
+    ret =
+        sensirion_i2c_write_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_READ_MEASUREMENT);
     if (ret != STATUS_OK)
         return ret;
-    ret = sensirion_i2c_read_bytes(SCD30_I2C_ADDRESS, data->bytes, sizeof(data));
+    ret =
+        sensirion_i2c_read_bytes(SCD30_I2C_ADDRESS, data->bytes, sizeof(data));
     if (ret != STATUS_OK)
         return ret;
 
