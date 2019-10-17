@@ -5,15 +5,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2019-10-17
+
  * [`fixed`]    Copy correct `AUTHORS`, `CHANGELOG.md`, `LICENSE`, and
                 `README.md` files to target locations when running the `release`
                 target of the driver's root Makefile.
  * [`removed`]  Remove the `AUTHORS` file from the driver and the
                 `embedded-common` submodule, as it adds more noise than benefit.
                 The contributors can be found in the git log.
- * ['changed']  Avoid converting twice between endianness in
+ * [`changed`]  Avoid converting twice between endianness in
                 `scd30_read_measurement`. (improves performance and portablity)
- * ['changed']  Cleanup scd30 example
+ * [`changed`]  Cleanup scd30 example
 
 ## [2.0.0] - 2019-10-01
 
@@ -50,7 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  * Initial support for SCD30
 
-[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/2.0.0...master
+[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/2.0.1...master
+[2.0.1]: https://github.com/Sensirion/embedded-scd/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/Sensirion/embedded-scd/compare/1.0.0...2.0.0
 [1.0.0]: https://github.com/Sensirion/embedded-scd/compare/0.9.0...1.0.0
 [0.9.0]: https://github.com/Sensirion/embedded-scd/compare/0.1.0...0.9.0
