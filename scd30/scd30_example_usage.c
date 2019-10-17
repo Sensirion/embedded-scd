@@ -31,11 +31,12 @@
 
 #include "scd30.h"
 
-/* TO USE CONSOLE OUTPUT (printf) AND WAIT (sleep/usleep) PLEASE ADAPT THEM TO
- * YOUR PLATFORM, OR REMOVE THE DEFINES BELOW TO USE AS-IS.
+#include <stdio.h> /* printf */
+
+/* TO USE CONSOLE OUTPUT (printf) YOU MAY NEED TO ADAPT THE
+ * INCLUDE ABOVE OR DEFINE IT ACCORDING TO YOUR PLATFORM.
+ * #define printf(...)
  */
-#include <stdio.h>  /* printf */
-#include <unistd.h> /* sleep, usleep */
 
 int main(void) {
     float32_t co2_ppm, temperature, relative_humidity;
@@ -51,14 +52,14 @@ int main(void) {
      */
     while (scd30_probe() != STATUS_OK) {
         printf("SCD30 sensor probing failed\n");
-        sleep(1);
+        sensirion_sleep_usec(1000000u);
     }
     printf("SCD30 sensor probing successful\n");
 
     scd30_set_measurement_interval(interval_in_seconds);
-    usleep(20000);
+    sensirion_sleep_usec(20000u);
     scd30_start_periodic_measurement(0);
-    sleep(interval_in_seconds);
+    sensirion_sleep_usec(interval_in_seconds * 1000000u);
 
     while (1) {
         /* Measure co2, temperature and relative humidity and store into
@@ -80,7 +81,7 @@ int main(void) {
                 }
             } else {
                 printf("measurement not ready\n");
-                usleep(20000);
+                sensirion_sleep_usec(20000u);
                 continue;
             }
 
@@ -88,7 +89,7 @@ int main(void) {
             printf("error reading data ready flag\n");
         }
 
-        sleep(interval_in_seconds);
+        sensirion_sleep_usec(interval_in_seconds * 1000000u);
     }
 
     scd30_stop_periodic_measurement();
