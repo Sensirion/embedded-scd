@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 The contributors can be found in the git log.
  * ['changed']  Avoid converting twice between endianness in
                 `scd30_read_measurement`. (improves performance and portablity)
+ * ['changed']  Cleanup scd30 example
 
 ## [2.0.0] - 2019-10-01
 
