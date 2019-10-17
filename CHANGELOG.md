@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2019-10-17
+
  * [`fixed`]    Copy correct `AUTHORS`, `CHANGELOG.md`, `LICENSE`, and
                 `README.md` files to target locations when running the `release`
                 target of the driver's root Makefile.
@@ -50,7 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  * Initial support for SCD30
 
-[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/2.0.0...master
+[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/2.0.1...master
+[2.0.1]: https://github.com/Sensirion/embedded-scd/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/Sensirion/embedded-scd/compare/1.0.0...2.0.0
 [1.0.0]: https://github.com/Sensirion/embedded-scd/compare/0.9.0...1.0.0
 [0.9.0]: https://github.com/Sensirion/embedded-scd/compare/0.1.0...0.9.0
