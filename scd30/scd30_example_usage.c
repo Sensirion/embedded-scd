@@ -40,7 +40,7 @@
 
 int main(void) {
     float32_t co2_ppm, temperature, relative_humidity;
-    int16_t ret;
+    int16_t err;
     uint16_t interval_in_seconds = 2;
 
     /* Initialize I2C */
@@ -64,9 +64,9 @@ int main(void) {
         /* Measure co2, temperature and relative humidity and store into
          * variables.
          */
-        ret =
+        err =
             scd30_read_measurement(&co2_ppm, &temperature, &relative_humidity);
-        if (ret != STATUS_OK) {
+        if (err != STATUS_OK) {
             printf("error reading measurement\n");
 
         } else {
