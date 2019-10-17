@@ -31,16 +31,16 @@
 
 #include "scd30.h"
 
-/* TO USE CONSOLE OUTPUT (printf) AND WAIT (sleep/usleep) PLEASE ADAPT THEM TO
- * YOUR PLATFORM, OR REMOVE THE DEFINES BELOW TO USE AS-IS.
+#include <stdio.h> /* printf */
+
+/* TO USE CONSOLE OUTPUT (printf) YOU MAY NEED TO ADAPT THE
+ * INCLUDE ABOVE OR DEFINE IT ACCORDING TO YOUR PLATFORM.
+ * #define printf(...)
  */
-#include <stdio.h>  /* printf */
-#include <unistd.h> /* sleep, usleep */
 
 int main(void) {
     float32_t co2_ppm, temperature, relative_humidity;
-    uint16_t data_ready;
-    int16_t ret;
+    int16_t err;
     uint16_t interval_in_seconds = 2;
 
     /* Initialize I2C */
@@ -51,44 +51,32 @@ int main(void) {
      */
     while (scd30_probe() != STATUS_OK) {
         printf("SCD30 sensor probing failed\n");
-        sleep(1);
+        sensirion_sleep_usec(1000000u);
     }
     printf("SCD30 sensor probing successful\n");
 
     scd30_set_measurement_interval(interval_in_seconds);
-    usleep(20000);
+    sensirion_sleep_usec(20000u);
     scd30_start_periodic_measurement(0);
-    sleep(interval_in_seconds);
+    sensirion_sleep_usec(interval_in_seconds * 1000000u);
 
     while (1) {
         /* Measure co2, temperature and relative humidity and store into
          * variables.
          */
-        ret = scd30_get_data_ready(&data_ready);
-        if (ret == STATUS_OK) {
-            if (data_ready) {
-                ret = scd30_read_measurement(&co2_ppm, &temperature,
-                                             &relative_humidity);
-                if (ret != STATUS_OK) {
-                    printf("error reading measurement\n");
-
-                } else {
-                    printf("measured co2 concentration: %0.2f ppm, "
-                           "measured temperature: %0.2f degreeCelsius, "
-                           "measured humidity: %0.2f %%RH\n",
-                           co2_ppm, temperature, relative_humidity);
-                }
-            } else {
-                printf("measurement not ready\n");
-                usleep(20000);
-                continue;
-            }
+        err =
+            scd30_read_measurement(&co2_ppm, &temperature, &relative_humidity);
+        if (err != STATUS_OK) {
+            printf("error reading measurement\n");
 
         } else {
-            printf("error reading data ready flag\n");
+            printf("measured co2 concentration: %0.2f ppm, "
+                   "measured temperature: %0.2f degreeCelsius, "
+                   "measured humidity: %0.2f %%RH\n",
+                   co2_ppm, temperature, relative_humidity);
         }
 
-        sleep(interval_in_seconds);
+        sensirion_sleep_usec(interval_in_seconds * 1000000u);
     }
 
     scd30_stop_periodic_measurement();

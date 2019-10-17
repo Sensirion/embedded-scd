@@ -34,7 +34,6 @@
 #include "sensirion_arch_config.h"
 #include "sensirion_common.h"
 #include "sensirion_i2c.h"
-#include "scd_git_version.h"
 
 #ifdef __cplusplus
 extern "C" {
