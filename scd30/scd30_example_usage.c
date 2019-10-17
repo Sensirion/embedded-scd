@@ -40,7 +40,6 @@
 
 int main(void) {
     float32_t co2_ppm, temperature, relative_humidity;
-    uint16_t data_ready;
     int16_t ret;
     uint16_t interval_in_seconds = 2;
 
@@ -65,28 +64,16 @@ int main(void) {
         /* Measure co2, temperature and relative humidity and store into
          * variables.
          */
-        ret = scd30_get_data_ready(&data_ready);
-        if (ret == STATUS_OK) {
-            if (data_ready) {
-                ret = scd30_read_measurement(&co2_ppm, &temperature,
-                                             &relative_humidity);
-                if (ret != STATUS_OK) {
-                    printf("error reading measurement\n");
-
-                } else {
-                    printf("measured co2 concentration: %0.2f ppm, "
-                           "measured temperature: %0.2f degreeCelsius, "
-                           "measured humidity: %0.2f %%RH\n",
-                           co2_ppm, temperature, relative_humidity);
-                }
-            } else {
-                printf("measurement not ready\n");
-                sensirion_sleep_usec(20000u);
-                continue;
-            }
+        ret =
+            scd30_read_measurement(&co2_ppm, &temperature, &relative_humidity);
+        if (ret != STATUS_OK) {
+            printf("error reading measurement\n");
 
         } else {
-            printf("error reading data ready flag\n");
+            printf("measured co2 concentration: %0.2f ppm, "
+                   "measured temperature: %0.2f degreeCelsius, "
+                   "measured humidity: %0.2f %%RH\n",
+                   co2_ppm, temperature, relative_humidity);
         }
 
         sensirion_sleep_usec(interval_in_seconds * 1000000u);
