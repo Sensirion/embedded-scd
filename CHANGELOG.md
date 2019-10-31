@@ -5,6 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+ * [`fixed`]    SCD30: Fix buffer overflow when reading measurements that was
+                introduced in 2.0.1.
+
 ## [2.0.1] - 2019-10-17
 
  * [`fixed`]    Copy correct `AUTHORS`, `CHANGELOG.md`, `LICENSE`, and

@@ -88,8 +88,9 @@ int16_t scd30_read_measurement(float32_t *co2_ppm, float32_t *temperature,
         sensirion_i2c_write_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_READ_MEASUREMENT);
     if (ret != STATUS_OK)
         return ret;
-    ret =
-        sensirion_i2c_read_bytes(SCD30_I2C_ADDRESS, data->bytes, sizeof(data));
+
+    ret = sensirion_i2c_read_words_as_bytes(SCD30_I2C_ADDRESS, data->bytes,
+                                            SENSIRION_NUM_WORDS(data));
     if (ret != STATUS_OK)
         return ret;
 
@@ -194,8 +195,8 @@ int16_t scd30_read_serial(char *serial) {
         return ret;
 
     sensirion_sleep_usec(SCD30_WRITE_DELAY_US);
-    ret = sensirion_i2c_read_bytes(SCD30_I2C_ADDRESS, (uint8_t *)serial,
-                                   SCD30_SERIAL_NUM_WORDS);
+    ret = sensirion_i2c_read_words_as_bytes(
+        SCD30_I2C_ADDRESS, (uint8_t *)serial, SCD30_SERIAL_NUM_WORDS);
     serial[2 * SCD30_SERIAL_NUM_WORDS] = '\0';
     return ret;
 }
