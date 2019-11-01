@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2] - 2019-11-01
+
  * [`fixed`]    SCD30: Fix buffer overflow when reading measurements that was
                 introduced in 2.0.1.
 
@@ -55,7 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  * Initial support for SCD30
 
-[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/2.0.1...master
+[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/2.0.2...master
+[2.0.2]: https://github.com/Sensirion/embedded-scd/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/Sensirion/embedded-scd/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/Sensirion/embedded-scd/compare/1.0.0...2.0.0
 [1.0.0]: https://github.com/Sensirion/embedded-scd/compare/0.9.0...1.0.0
