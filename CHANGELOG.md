@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+ * [`fixed`]    Fix typo in header include-guard now.
+
 ## [2.0.2] - 2019-11-01
 
  * [`fixed`]    SCD30: Fix buffer overflow when reading measurements that was
