@@ -75,12 +75,12 @@ int16_t scd30_stop_periodic_measurement() {
                                    SCD30_CMD_STOP_PERIODIC_MEASUREMENT);
 }
 
-int16_t scd30_read_measurement(float32_t *co2_ppm, float32_t *temperature,
-                               float32_t *humidity) {
+int16_t scd30_read_measurement(float *co2_ppm, float *temperature,
+                               float *humidity) {
     int16_t ret;
     union {
         uint32_t u32_value;
-        float32_t float32;
+        float float32;
         uint8_t bytes[4];
     } tmp, data[3];
 

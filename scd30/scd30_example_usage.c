@@ -39,7 +39,7 @@
  */
 
 int main(void) {
-    float32_t co2_ppm, temperature, relative_humidity;
+    float co2_ppm, temperature, relative_humidity;
     int16_t err;
     uint16_t interval_in_seconds = 2;
 
