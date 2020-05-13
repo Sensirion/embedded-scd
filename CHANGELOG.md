@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  * [`fixed`]    Fix typo in header include-guard now.
  * [`changed`]  Use `float` instead of the custom `float32_t` type
+ * [`changed`]  Use configuration independent endianness conversions: no need to
+                define SENSIRION_BIG_ENDIAN anymore.
 
 ## [2.0.2] - 2019-11-01
 

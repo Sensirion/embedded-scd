@@ -78,30 +78,21 @@ int16_t scd30_stop_periodic_measurement() {
 int16_t scd30_read_measurement(float *co2_ppm, float *temperature,
                                float *humidity) {
     int16_t ret;
-    union {
-        uint32_t u32_value;
-        float float32;
-        uint8_t bytes[4];
-    } tmp, data[3];
+    uint8_t data[3][4];
 
     ret =
         sensirion_i2c_write_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_READ_MEASUREMENT);
     if (ret != STATUS_OK)
         return ret;
 
-    ret = sensirion_i2c_read_words_as_bytes(SCD30_I2C_ADDRESS, data->bytes,
+    ret = sensirion_i2c_read_words_as_bytes(SCD30_I2C_ADDRESS, &data[0][0],
                                             SENSIRION_NUM_WORDS(data));
     if (ret != STATUS_OK)
         return ret;
 
-    tmp.u32_value = be32_to_cpu(data[0].u32_value);
-    *co2_ppm = tmp.float32;
-
-    tmp.u32_value = be32_to_cpu(data[1].u32_value);
-    *temperature = tmp.float32;
-
-    tmp.u32_value = be32_to_cpu(data[2].u32_value);
-    *humidity = tmp.float32;
+    *co2_ppm = sensirion_bytes_to_float(data[0]);
+    *temperature = sensirion_bytes_to_float(data[1]);
+    *humidity = sensirion_bytes_to_float(data[2]);
 
     return STATUS_OK;
 }
