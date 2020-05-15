@@ -104,8 +104,8 @@ int16_t scd30_stop_periodic_measurement(void);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-int16_t scd30_read_measurement(float32_t *co2_ppm, float32_t *temperature,
-                               float32_t *humidity);
+int16_t scd30_read_measurement(float *co2_ppm, float *temperature,
+                               float *humidity);
 
 /**
  * scd30_set_measurement_interval() - Sets the measurement interval in
