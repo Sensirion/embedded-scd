@@ -5,7 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
- * [`fixed`]    Fix typo in header include-guard now.
+## [2.1.0] - 2020-07-08
+
+ * [`fixed`]    Fix typo in header include-guard.
  * [`changed`]  Use `float` instead of the custom `float32_t` type
  * [`changed`]  Use configuration independent endianness conversions: no need to
                 define SENSIRION_BIG_ENDIAN anymore.
@@ -62,7 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  * Initial support for SCD30
 
-[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/2.0.2...master
+[Unreleased]: https://github.com/Sensirion/embedded-scd/compare/2.1.0...master
+[2.1.0]: https://github.com/Sensirion/embedded-scd/compare/2.0.2...2.1.0
 [2.0.2]: https://github.com/Sensirion/embedded-scd/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/Sensirion/embedded-scd/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/Sensirion/embedded-scd/compare/1.0.0...2.0.0
