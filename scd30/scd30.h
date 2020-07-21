@@ -51,7 +51,7 @@ int16_t scd30_probe(void);
  *
  * @return  Driver version string
  */
-const char *scd30_get_driver_version(void);
+const char* scd30_get_driver_version(void);
 
 /**
  * scd30_get_configured_address() - Returns the configured I2C address
@@ -104,8 +104,8 @@ int16_t scd30_stop_periodic_measurement(void);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-int16_t scd30_read_measurement(float *co2_ppm, float *temperature,
-                               float *humidity);
+int16_t scd30_read_measurement(float* co2_ppm, float* temperature,
+                               float* humidity);
 
 /**
  * scd30_set_measurement_interval() - Sets the measurement interval in
@@ -138,7 +138,7 @@ int16_t scd30_set_measurement_interval(uint16_t interval_sec);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-int16_t scd30_get_data_ready(uint16_t *data_ready);
+int16_t scd30_get_data_ready(uint16_t* data_ready);
 
 /**
  * scd30_set_temperature_offset() - Set the temperature offset
@@ -189,7 +189,7 @@ int16_t scd30_set_altitude(uint16_t altitude);
  *
  * @return              0 if the command was successful, an error code otherwise
  */
-int16_t scd30_get_automatic_self_calibration(uint8_t *asc_enabled);
+int16_t scd30_get_automatic_self_calibration(uint8_t* asc_enabled);
 
 /**
  * scd30_enable_automatic_self_calibration() - Enable or disable the sensor's
@@ -253,7 +253,7 @@ int16_t scd30_set_forced_recalibration(uint16_t co2_ppm);
  *                  Contains a zero-terminated string.
  * @return          0 if the command was successful, else an error code.
  */
-int16_t scd30_read_serial(char *serial);
+int16_t scd30_read_serial(char* serial);
 
 #ifdef __cplusplus
 }
