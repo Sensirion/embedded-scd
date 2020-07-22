@@ -32,6 +32,6 @@
 #ifndef SCD_GIT_VERSION_H
 #define SCD_GIT_VERSION_H
 
-extern const char *SCD_DRV_VERSION_STR;
+extern const char* SCD_DRV_VERSION_STR;
 
 #endif /* SCD_GIT_VERSION_H */

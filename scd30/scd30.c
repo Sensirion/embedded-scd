@@ -55,7 +55,7 @@ static const uint8_t SCD30_I2C_ADDRESS = 0x61;
 #define SCD30_WRITE_DELAY_US 20000
 
 #define SCD30_MAX_BUFFER_WORDS 24
-#define SCD30_CMD_SINGLE_WORD_BUF_LEN                                          \
+#define SCD30_CMD_SINGLE_WORD_BUF_LEN \
     (SENSIRION_COMMAND_SIZE + SENSIRION_WORD_SIZE + CRC8_LEN)
 
 int16_t scd30_start_periodic_measurement(uint16_t ambient_pressure_mbar) {
@@ -75,8 +75,8 @@ int16_t scd30_stop_periodic_measurement() {
                                    SCD30_CMD_STOP_PERIODIC_MEASUREMENT);
 }
 
-int16_t scd30_read_measurement(float *co2_ppm, float *temperature,
-                               float *humidity) {
+int16_t scd30_read_measurement(float* co2_ppm, float* temperature,
+                               float* humidity) {
     int16_t ret;
     uint8_t data[3][4];
 
@@ -113,7 +113,7 @@ int16_t scd30_set_measurement_interval(uint16_t interval_sec) {
     return ret;
 }
 
-int16_t scd30_get_data_ready(uint16_t *data_ready) {
+int16_t scd30_get_data_ready(uint16_t* data_ready) {
     return sensirion_i2c_read_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_GET_DATA_READY,
                                   data_ready, SENSIRION_NUM_WORDS(*data_ready));
 }
@@ -140,7 +140,7 @@ int16_t scd30_set_altitude(uint16_t altitude) {
     return ret;
 }
 
-int16_t scd30_get_automatic_self_calibration(uint8_t *asc_enabled) {
+int16_t scd30_get_automatic_self_calibration(uint8_t* asc_enabled) {
     uint16_t word;
     int16_t ret;
 
@@ -178,7 +178,7 @@ int16_t scd30_set_forced_recalibration(uint16_t co2_ppm) {
     return ret;
 }
 
-int16_t scd30_read_serial(char *serial) {
+int16_t scd30_read_serial(char* serial) {
     int16_t ret;
 
     ret = sensirion_i2c_write_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_READ_SERIAL);
@@ -186,13 +186,13 @@ int16_t scd30_read_serial(char *serial) {
         return ret;
 
     sensirion_sleep_usec(SCD30_WRITE_DELAY_US);
-    ret = sensirion_i2c_read_words_as_bytes(
-        SCD30_I2C_ADDRESS, (uint8_t *)serial, SCD30_SERIAL_NUM_WORDS);
+    ret = sensirion_i2c_read_words_as_bytes(SCD30_I2C_ADDRESS, (uint8_t*)serial,
+                                            SCD30_SERIAL_NUM_WORDS);
     serial[2 * SCD30_SERIAL_NUM_WORDS] = '\0';
     return ret;
 }
 
-const char *scd30_get_driver_version() {
+const char* scd30_get_driver_version() {
     return SCD_DRV_VERSION_STR;
 }
 
