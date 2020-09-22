@@ -1,5 +1,5 @@
-#include "sensirion_test_setup.h"
 #include "scd30.h"
+#include "sensirion_test_setup.h"
 
 #define SCD30_TEST_MIN_PRESSURE 700
 #define SCD30_TEST_MAX_PRESSURE 1400
@@ -22,10 +22,10 @@ static void scd30_tests(uint16_t interval_s, uint16_t pressure_mbar) {
     printf("\t\t\t\tTesting with pressure = %umbar\n", pressure_mbar);
 
     ret = scd30_start_periodic_measurement(pressure_mbar);
-    if (pressure_mbar == 0 ||
-        (pressure_mbar >= SCD30_TEST_MIN_PRESSURE &&
-         pressure_mbar <= SCD30_TEST_MAX_PRESSURE)) {
-        CHECK_ZERO_TEXT(ret, "scd30_start_periodic_measurement should not fail");
+    if (pressure_mbar == 0 || (pressure_mbar >= SCD30_TEST_MIN_PRESSURE &&
+                               pressure_mbar <= SCD30_TEST_MAX_PRESSURE)) {
+        CHECK_ZERO_TEXT(ret,
+                        "scd30_start_periodic_measurement should not fail");
     } else {
         CHECK_TRUE_TEXT(ret, "scd30_start_periodic_measurement should fail");
         return;
@@ -46,7 +46,7 @@ static void scd30_tests(uint16_t interval_s, uint16_t pressure_mbar) {
 
     // Wait for data to be ready
     do {
-        sensirion_sleep_usec(1e5); // Sleep 100ms
+        sensirion_sleep_usec(1e5);  // Sleep 100ms
         ret = scd30_get_data_ready(&data_ready);
         CHECK_ZERO_TEXT(ret, "scd30_get_data_ready while polling");
     } while (!data_ready);
@@ -59,10 +59,10 @@ static void scd30_tests(uint16_t interval_s, uint16_t pressure_mbar) {
     CHECK_TRUE_TEXT(co2_ppm >= SCD30_MIN_CO2 && co2_ppm <= SCD30_MAX_CO2,
                     "scd30_measurement CO2");
     CHECK_TRUE_TEXT(temperature >= SCD30_MIN_TEMPERATURE &&
-                    temperature <= SCD30_MAX_TEMPERATURE,
+                        temperature <= SCD30_MAX_TEMPERATURE,
                     "scd30_measurement temperature");
     CHECK_TRUE_TEXT(humidity >= SCD30_MIN_HUMIDITY &&
-                    humidity <= SCD30_MAX_HUMIDITY,
+                        humidity <= SCD30_MAX_HUMIDITY,
                     "scd30_measurement humidity");
 
     ret = scd30_stop_periodic_measurement();
@@ -90,10 +90,13 @@ static void scd30_test_set_measurement_interval(uint16_t interval_s) {
 }
 
 static void scd30_test_all_measurement_intervals() {
-    scd30_test_set_measurement_interval(SCD30_TEST_MIN_MEASUREMENT_INTERVAL - 1);
+    scd30_test_set_measurement_interval(SCD30_TEST_MIN_MEASUREMENT_INTERVAL -
+                                        1);
     scd30_test_set_measurement_interval(SCD30_TEST_MIN_MEASUREMENT_INTERVAL);
-    scd30_test_set_measurement_interval(2 * SCD30_TEST_MIN_MEASUREMENT_INTERVAL);
-    scd30_test_set_measurement_interval(SCD30_TEST_MAX_MEASUREMENT_INTERVAL + 1);
+    scd30_test_set_measurement_interval(2 *
+                                        SCD30_TEST_MIN_MEASUREMENT_INTERVAL);
+    scd30_test_set_measurement_interval(SCD30_TEST_MAX_MEASUREMENT_INTERVAL +
+                                        1);
 }
 
 static void scd30_test_temperature_offset(uint16_t temp_offset) {
@@ -104,8 +107,8 @@ static void scd30_test_temperature_offset(uint16_t temp_offset) {
 }
 
 static void scd30_test_all_temperature_offsets() {
-    scd30_test_temperature_offset(0); // No offset
-    scd30_test_temperature_offset(50); // 50 degrees C
+    scd30_test_temperature_offset(0);   // No offset
+    scd30_test_temperature_offset(50);  // 50 degrees C
 }
 
 static void scd30_test_altitude(uint16_t altitude) {
@@ -117,8 +120,8 @@ static void scd30_test_altitude(uint16_t altitude) {
 }
 
 static void scd30_test_all_altitudes() {
-    scd30_test_altitude(0); // Altitude compensation disabled
-    scd30_test_altitude(500); // With altitude compensation on 500m
+    scd30_test_altitude(0);    // Altitude compensation disabled
+    scd30_test_altitude(500);  // With altitude compensation on 500m
 }
 
 static void scd30_test_automatic_calibration(uint8_t set_asc) {
@@ -131,13 +134,15 @@ static void scd30_test_automatic_calibration(uint8_t set_asc) {
     ret = scd30_get_automatic_self_calibration(&get_asc);
     CHECK_ZERO_TEXT(ret, "scd30_get_automatic_self_calibration");
 
-    CHECK_EQUAL_TEXT(set_asc, get_asc, "automatic_self_calibration variables should match");
+    CHECK_EQUAL_TEXT(set_asc, get_asc,
+                     "automatic_self_calibration variables should match");
     scd30_test_all_altitudes();
 }
 
 static int16_t scd30_reset() {
     const uint16_t arg = 1;
-    int16_t ret = sensirion_i2c_write_cmd_with_args(0x61, 0xD304, &arg, SENSIRION_NUM_WORDS(arg));
+    int16_t ret = sensirion_i2c_write_cmd_with_args(0x61, 0xD304, &arg,
+                                                    SENSIRION_NUM_WORDS(arg));
     sensirion_sleep_usec(1e6);
     return ret;
 }
@@ -149,7 +154,7 @@ static void scd30_test_setup() {
     ret = scd30_reset();
     CHECK_ZERO_TEXT(ret, "scd30_reset");
 
-    const char *version = scd30_get_driver_version();
+    const char* version = scd30_get_driver_version();
     printf("scd30_get_driver_version: %s\n", version);
 
     uint8_t addr = scd30_get_configured_address();
@@ -160,7 +165,7 @@ static void scd30_test_setup() {
     printf("SCD30 serial: %s\n", serial);
 }
 
-TEST_GROUP(SCDTestGroup) {
+TEST_GROUP (SCDTestGroup) {
     void setup() {
         int16_t ret;
         sensirion_i2c_init();
@@ -178,17 +183,17 @@ TEST_GROUP(SCDTestGroup) {
     }
 };
 
-TEST(SCDTestGroup, SCD30Test_no_automatic) {
+TEST (SCDTestGroup, SCD30Test_no_automatic) {
     printf("Starting SCD30 Test without automatic calibration\n");
     scd30_test_automatic_calibration(0);
 }
 
-TEST(SCDTestGroup, SCD30Test_with_automatic) {
+TEST (SCDTestGroup, SCD30Test_with_automatic) {
     printf("Starting SCD30 Test with automatic calibration\n");
     scd30_test_automatic_calibration(1);
 }
 
-TEST(SCDTestGroup, SCD30Test_with_forced) {
+TEST (SCDTestGroup, SCD30Test_with_forced) {
     printf("Starting SCD30 Test with forced calibration\n");
     int16_t ret = scd30_set_forced_recalibration(400);
     CHECK_ZERO_TEXT(ret, "scd30_set_forced_recalibration");
