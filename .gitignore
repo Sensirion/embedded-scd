@@ -3,3 +3,6 @@
 /scd-common/scd_git_version.c
 /scd30/scd30_example_usage
 /scd30/user_config.inc
+i2c-mux-testbed/
+tests/scd-test-hw_i2c
+tests/scd-test-sw_i2c
