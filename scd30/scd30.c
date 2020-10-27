@@ -82,19 +82,19 @@ int16_t scd30_read_measurement(float* co2_ppm, float* temperature,
 
     ret =
         sensirion_i2c_write_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_READ_MEASUREMENT);
-    if (ret != STATUS_OK)
+    if (ret != NO_ERROR)
         return ret;
 
     ret = sensirion_i2c_read_words_as_bytes(SCD30_I2C_ADDRESS, &data[0][0],
                                             SENSIRION_NUM_WORDS(data));
-    if (ret != STATUS_OK)
+    if (ret != NO_ERROR)
         return ret;
 
     *co2_ppm = sensirion_bytes_to_float(data[0]);
     *temperature = sensirion_bytes_to_float(data[1]);
     *humidity = sensirion_bytes_to_float(data[2]);
 
-    return STATUS_OK;
+    return NO_ERROR;
 }
 
 int16_t scd30_set_measurement_interval(uint16_t interval_sec) {
@@ -148,12 +148,12 @@ int16_t scd30_get_automatic_self_calibration(uint8_t* asc_enabled) {
     ret = sensirion_i2c_read_cmd(SCD30_I2C_ADDRESS,
                                  SCD30_CMD_AUTO_SELF_CALIBRATION, &word,
                                  SENSIRION_NUM_WORDS(word));
-    if (ret != STATUS_OK)
+    if (ret != NO_ERROR)
         return ret;
 
     *asc_enabled = (uint8_t)word;
 
-    return STATUS_OK;
+    return NO_ERROR;
 }
 
 int16_t scd30_enable_automatic_self_calibration(uint8_t enable_asc) {

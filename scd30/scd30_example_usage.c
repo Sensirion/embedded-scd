@@ -49,7 +49,7 @@ int main(void) {
     /* Busy loop for initialization, because the main loop does not work without
      * a sensor.
      */
-    while (scd30_probe() != STATUS_OK) {
+    while (scd30_probe() != NO_ERROR) {
         printf("SCD30 sensor probing failed\n");
         sensirion_sleep_usec(1000000u);
     }
@@ -66,7 +66,7 @@ int main(void) {
          */
         err =
             scd30_read_measurement(&co2_ppm, &temperature, &relative_humidity);
-        if (err != STATUS_OK) {
+        if (err != NO_ERROR) {
             printf("error reading measurement\n");
 
         } else {
