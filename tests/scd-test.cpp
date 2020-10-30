@@ -14,7 +14,7 @@
 
 static void scd30_tests(uint16_t interval_s, uint16_t pressure_mbar) {
     int16_t ret;
-    uint16_t data_ready;
+    uint16_t data_ready, timeout;
     float co2_ppm;
     float temperature;
     float humidity;
@@ -50,11 +50,14 @@ static void scd30_tests(uint16_t interval_s, uint16_t pressure_mbar) {
     sensirion_sleep_usec((1e6 * interval_s) - 1e5);
 
     // Wait for data to be ready
-    do {
-        sensirion_sleep_usec(1e5);  // Sleep 100ms
+    for (timeout = 10; timeout > 0; --timeout) {
+        sensirion_sleep_usec(50000);  // Sleep 50ms
         ret = scd30_get_data_ready(&data_ready);
         CHECK_ZERO_TEXT(ret, "scd30_get_data_ready while polling");
-    } while (!data_ready);
+        if (data_ready)
+            break;
+    }
+    CHECK_TRUE_TEXT(timeout, "scd30_get_data_ready not ready");
 
     ret = scd30_read_measurement(&co2_ppm, &temperature, &humidity);
     CHECK_ZERO_TEXT(ret, "scd30_read_measurement");
