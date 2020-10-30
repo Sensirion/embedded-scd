@@ -39,6 +39,11 @@ static void scd30_tests(uint16_t interval_s, uint16_t pressure_mbar) {
         // Get old data and discard it
         ret = scd30_read_measurement(&co2_ppm, &temperature, &humidity);
         CHECK_ZERO_TEXT(ret, "scd30_read_measurement for old data");
+    } else {
+        // Ensure that reads outside the readiness window fail
+        ret = scd30_read_measurement(&co2_ppm, &temperature, &humidity);
+        CHECK_EQUAL_TEXT(SCD30_STATUS_NOT_READY, ret,
+                         "scd30_read_measurement not ready");
     }
 
     // Sleep for interval_s seconds minus 100ms
