@@ -35,6 +35,8 @@
 #include "sensirion_common.h"
 #include "sensirion_i2c.h"
 
+#define SCD30_STATUS_NOT_READY 2
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -103,6 +105,11 @@ int16_t scd30_stop_periodic_measurement(void);
  *                      measurement
  *
  * @return              0 if the command was successful, an error code otherwise
+ *                      The error code SCD30_STATUS_NOT_READY is returned if the
+ *                      measurement is retrieved outside of the 100ms readiness
+ *                      window after the sensor's internal measurement. With
+ *                      imprecise or drifting clocks, this could occasionally
+ *                      occur.
  */
 int16_t scd30_read_measurement(float* co2_ppm, float* temperature,
                                float* humidity);

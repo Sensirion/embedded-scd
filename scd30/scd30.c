@@ -78,6 +78,7 @@ int16_t scd30_stop_periodic_measurement() {
 int16_t scd30_read_measurement(float* co2_ppm, float* temperature,
                                float* humidity) {
     int16_t ret;
+    uint16_t i;
     uint8_t data[3][4];
 
     ret =
@@ -94,7 +95,14 @@ int16_t scd30_read_measurement(float* co2_ppm, float* temperature,
     *temperature = sensirion_bytes_to_float(data[1]);
     *humidity = sensirion_bytes_to_float(data[2]);
 
-    return STATUS_OK;
+    /* check if the result in data is all 0xff indicating a read outside of the
+     * readiness window */
+    for (i = 0; i < sizeof(data); ++i) {
+        if (((uint8_t*)data)[i] != 0xff)
+            return STATUS_OK;
+    }
+
+    return SCD30_STATUS_NOT_READY;
 }
 
 int16_t scd30_set_measurement_interval(uint16_t interval_sec) {
