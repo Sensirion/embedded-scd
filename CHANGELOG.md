@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
  * [`changed`] Makefile to only include needed files from embedded-common
+ * [`fixed`]   Fix bug where data ready flag could not be read.
 
 ## [2.1.0] - 2020-07-08
 
