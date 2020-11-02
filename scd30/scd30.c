@@ -114,8 +114,9 @@ int16_t scd30_set_measurement_interval(uint16_t interval_sec) {
 }
 
 int16_t scd30_get_data_ready(uint16_t* data_ready) {
-    return sensirion_i2c_read_cmd(SCD30_I2C_ADDRESS, SCD30_CMD_GET_DATA_READY,
-                                  data_ready, SENSIRION_NUM_WORDS(*data_ready));
+    return sensirion_i2c_delayed_read_cmd(
+        SCD30_I2C_ADDRESS, SCD30_CMD_GET_DATA_READY, 3000, data_ready,
+        SENSIRION_NUM_WORDS(*data_ready));
 }
 
 int16_t scd30_set_temperature_offset(uint16_t temperature_offset) {
