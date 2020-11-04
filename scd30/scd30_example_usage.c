@@ -63,7 +63,7 @@ int main(void) {
         uint16_t data_ready = 0;
         uint16_t timeout = 0;
 
-        /* Poll data_ready flag until data is available. Allow %20 more than
+        /* Poll data_ready flag until data is available. Allow 20% more than
          * the measurement interval to account for clock imprecision of the
          * sensor.
          */
