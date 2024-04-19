@@ -1,4 +1,9 @@
-# embedded-scd [![CircleCI](https://circleci.com/gh/Sensirion/embedded-scd.svg?style=shield)](https://circleci.com/gh/Sensirion/embedded-scd) [![GitHub license](https://img.shields.io/badge/license-BSD3-blue.svg)](https://raw.githubusercontent.com/Sensirion/embedded-scd/master/LICENSE)
+# embedded-scd [![GitHub license](https://img.shields.io/badge/license-BSD3-blue.svg)](https://raw.githubusercontent.com/Sensirion/embedded-scd/master/LICENSE)
+
+Note: This repository is deprecated. Please use our new drivers:
+* SCD30: https://github.com/Sensirion/embedded-i2c-scd30
+* SCD4x: https://github.com/Sensirion/embedded-i2c-scd4x
+
 This repository contains the embedded driver sources for Sensirion's SCD product
 line.
 
